@@ -54,7 +54,7 @@ def setup_lora_model(model_name):
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         device_map=device_map,
-        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+        dtype=torch.float16 if torch.cuda.is_available() else torch.float32
     )
     
     lora_config = LoraConfig(
