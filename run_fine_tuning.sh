@@ -36,14 +36,9 @@ if ! conda env list | grep -q "^${ENV_NAME} "; then
     conda create -n ${ENV_NAME} python=3.12 -y
 fi
 
-# Activate environment
-echo "🔄 Activating environment..."
-source $(conda info --base)/etc/profile.d/conda.sh
-conda activate ${ENV_NAME}
-
-# Install dependencies
+# Install dependencies using conda run (bypasses activation issues)
 echo "📥 Installing dependencies..."
-pip install -r requirements.txt
+conda run -n ${ENV_NAME} pip install -r requirements.txt
 
 # Check if mariya.json exists
 if [ ! -f "mariya.json" ]; then
@@ -58,7 +53,8 @@ if [ ! -f "mariya.json" ]; then
 fi
 
 # Check GPU availability
-if python -c "import torch; print('🚀 CUDA available:', torch.cuda.is_available())"; then
+echo "🔍 Checking GPU availability..."
+if conda run -n ${ENV_NAME} python -c "import torch; print('🚀 CUDA available:', torch.cuda.is_available())"; then
     echo "✅ GPU setup verified"
 else
     echo "⚠️  No GPU detected - training will use CPU (much slower)"
@@ -69,8 +65,8 @@ echo "🎯 Starting fine-tuning process..."
 echo "   This may take 10+ minutes depending on your hardware"
 echo ""
 
-# Run the fine-tuning script
-python fine_tune.py "$@"
+# Run the fine-tuning script using conda run
+conda run -n ${ENV_NAME} python fine_tune.py "$@"
 
 echo ""
 echo "🎉 Fine-tuning process completed!"
