@@ -1,0 +1,30 @@
+# Model outputs
+my-qwen/
+*.bin
+*.safetensors
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+.venv/
+
+# Logs
+*.log
+wandb/
+
+# Cache
+.cache/
+.huggingface/
+
+# OS
+.DS_Store
+Thumbs.db
